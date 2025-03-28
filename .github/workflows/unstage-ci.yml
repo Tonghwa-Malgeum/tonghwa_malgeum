@@ -1,4 +1,4 @@
-name: unstage-cd
+name: unstage-ci
 
 on:
   workflow_dispatch:
