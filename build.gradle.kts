@@ -62,18 +62,18 @@ project(":api") {
         dependsOn("copyApiConfigInProd")
     }
     tasks.register<Copy>("copyApiConfigInProd") {
-        from("${project.rootDir}/unstage-config/api/main")
+        from("../unstage-config/api/main")
         include("**/*.yml")
-        into("${project.rootDir}/api/src/main/resources")
+        into("../api/src/main/resources")
     }
 
     tasks.named<ProcessResources>("processTestResources") {
         dependsOn("copyApiConfigInTest")
     }
     tasks.register<Copy>("copyApiConfigInTest") {
-        from("${project.rootDir}/unstage-config/api/test")
+        from("../unstage-config/api/test")
         include("**/*.yml")
-        into("${project.rootDir}/api/src/test/resources")
+        into("../api/src/test/resources")
     }
 }
 
@@ -82,17 +82,17 @@ project(":core") {
         dependsOn("copyCoreConfigInProd")
     }
     tasks.register<Copy>("copyCoreConfigInProd") {
-        from("${project.rootDir}/unstage-config/core/main")
+        from("../unstage-config/core/main")
         include("**/*.yml")
-        into("${project.rootDir}/core/src/main/resources")
+        into("../core/src/main/resources")
     }
 
     tasks.named<ProcessResources>("processTestResources") {
         dependsOn("copyCoreConfigInTest")
     }
     tasks.register<Copy>("copyCoreConfigInTest") {
-        from("${project.rootDir}/unstage-config/core/test")
+        from("../unstage-config/core/test")
         include("**/*.yml")
-        into("${project.rootDir}/core/src/test/resources")
+        into("../core/src/test/resources")
     }
 }
