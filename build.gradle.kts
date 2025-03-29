@@ -56,3 +56,43 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+project(":api") {
+    tasks.named<ProcessResources>("processResources") {
+        dependsOn("copyApiConfigInProd")
+    }
+    tasks.register<Copy>("copyApiConfigInProd") {
+        from("${project.rootDir}/unstage-config/api/main")
+        include("**/*.yml")
+        into("${project.rootDir}/api/src/main/resources")
+    }
+
+    tasks.named<ProcessResources>("processTestResources") {
+        dependsOn("copyApiConfigInTest")
+    }
+    tasks.register<Copy>("copyApiConfigInTest") {
+        from("${project.rootDir}/unstage-config/api/test")
+        include("**/*.yml")
+        into("${project.rootDir}/api/src/test/resources")
+    }
+}
+
+project(":core") {
+    tasks.named<ProcessResources>("processResources") {
+        dependsOn("copyCoreConfigInProd")
+    }
+    tasks.register<Copy>("copyCoreConfigInProd") {
+        from("${project.rootDir}/unstage-config/core/main")
+        include("**/*.yml")
+        into("${project.rootDir}/core/src/main/resources")
+    }
+
+    tasks.named<ProcessResources>("processTestResources") {
+        dependsOn("copyCoreConfigInTest")
+    }
+    tasks.register<Copy>("copyCoreConfigInTest") {
+        from("${project.rootDir}/unstage-config/core/test")
+        include("**/*.yml")
+        into("${project.rootDir}/core/src/test/resources")
+    }
+}
