@@ -2,7 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 tasks.named<BootJar>("bootJar") {
     enabled = true
-    mainClass.set("com.unstage.api.UnstageApiApplication")
+    mainClass.set("com.unstage.api.UnstageApplication")
 }
 
 tasks.named<Jar>("jar") {
