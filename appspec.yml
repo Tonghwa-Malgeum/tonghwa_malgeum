@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/nginx/unstage/
+    destination: /home/ubuntu/unstage/
     overwrite: yes
 
 permissions:
