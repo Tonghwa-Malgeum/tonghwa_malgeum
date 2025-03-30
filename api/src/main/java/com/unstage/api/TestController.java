@@ -16,7 +16,7 @@ public class TestController {
     @Autowired
     private AService aService;
 
-    @GetMapping("/")
+    @GetMapping("/version")
     public String version() {
         return String.format("Project Version: %s", version);
     }
