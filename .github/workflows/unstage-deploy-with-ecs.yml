@@ -6,6 +6,9 @@ on:
 env:
   ECR_REPOSITORY_NAME: unstage-ecr
   DOCKERFILE_SPRING_PATH: ./unstage-config/ec2/Dockerfile.spring
+  ECS_CLUSTER_NAME: unstage-cluster
+  ECS_SERVICE_NAME: unstage-ecs-service
+  TASK_DEFINITION_CONTAINER_NAME: was-spring
 
 jobs:
   build:
@@ -48,6 +51,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push docker image to Amazon ECR
+        id: build-image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ env.ECR_REPOSITORY_NAME }}
@@ -55,3 +59,22 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f $DOCKERFILE_SPRING_PATH .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ./unstage-config/ecs/spring-task-definition.json
+          container-name: ${{ env.TASK_DEFINITION_CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy Amazon ECS task definition to ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE_NAME }}
+          cluster: ${{ env.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true # 서비스 안정성 확보 후 워크플로우 종료
+          deployment-controller-type: ECS # CodeDeploy가 아닌 기본 ECS 배포 방식
+          force-new-deployment: true # 동일 태스크 정의라도 강제 재배포
