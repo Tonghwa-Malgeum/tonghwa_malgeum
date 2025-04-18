@@ -96,3 +96,14 @@ project(":core") {
         into("${project.rootDir}/core/src/test/resources")
     }
 }
+
+project(":support:monitoring") {
+    tasks.named<ProcessResources>("processResources") {
+        dependsOn("copyCoreConfigInProd")
+    }
+    tasks.register<Copy>("copyCoreConfigInProd") {
+        from("${project.rootDir}/unstage-config/monitoring")
+        include("**/*.yml")
+        into("${project.rootDir}/support/monitoring/src/main/resources")
+    }
+}

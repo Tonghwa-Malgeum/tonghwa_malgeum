@@ -14,6 +14,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     implementation(project(":core"))
+    implementation(project(":support:monitoring"))
 
     testImplementation(testFixtures(project(":core")))
     testFixturesImplementation(project(":core"))
