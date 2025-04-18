@@ -1,4 +1,4 @@
-name: unstage-deploy-with-ecs
+name: unstage-was-deploy-with-ecs
 
 on:
   workflow_dispatch:
