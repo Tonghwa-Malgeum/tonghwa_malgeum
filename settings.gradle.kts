@@ -3,7 +3,8 @@ rootProject.name = "unstage"
 include(
     "api",
     "core",
-    "support:monitoring"
+    "support:monitoring",
+    "support:logging"
 )
 
 pluginManagement {

@@ -15,6 +15,7 @@ dependencies {
 
     implementation(project(":core"))
     implementation(project(":support:monitoring"))
+    implementation(project(":support:logging"))
 
     testImplementation(testFixtures(project(":core")))
     testFixturesImplementation(project(":core"))
