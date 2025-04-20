@@ -40,3 +40,6 @@ out/
 **/src/main/resources/*.yml
 **/src/test/resources/*.yml
 **/src/testFixtures/resources/*.yml
+
+##log
+log/
