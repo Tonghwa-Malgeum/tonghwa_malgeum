@@ -9,6 +9,7 @@ env:
   ECS_CLUSTER_NAME: unstage-cluster
   ECS_SERVICE_NAME: unstage-ecs-service
   TASK_DEFINITION_CONTAINER_NAME: was-spring
+  TASK_DEFINITION_PATH: ./unstage-config/ecs/spring-task-definition-dev.json
 
 jobs:
   build:
@@ -57,15 +58,16 @@ jobs:
           REPOSITORY: ${{ env.ECR_REPOSITORY_NAME }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f $DOCKERFILE_SPRING_PATH .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
-          echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          IMAGE_URI=$REGISTRY/$REPOSITORY:$IMAGE_TAG
+          docker build -t $IMAGE_URI -f $DOCKERFILE_SPRING_PATH .
+          docker push $IMAGE_URI
+          echo "image=$IMAGE_URI" >> $GITHUB_OUTPUT
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ./unstage-config/ecs/spring-task-definition.json
+          task-definition: ${{ env.TASK_DEFINITION_PATH }}
           container-name: ${{ env.TASK_DEFINITION_CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
@@ -76,5 +78,4 @@ jobs:
           service: ${{ env.ECS_SERVICE_NAME }}
           cluster: ${{ env.ECS_CLUSTER_NAME }}
           wait-for-service-stability: true # 서비스 안정성 확보 후 워크플로우 종료
-          deployment-controller-type: ECS # CodeDeploy가 아닌 기본 ECS 배포 방식
           force-new-deployment: true # 동일 태스크 정의라도 강제 재배포
