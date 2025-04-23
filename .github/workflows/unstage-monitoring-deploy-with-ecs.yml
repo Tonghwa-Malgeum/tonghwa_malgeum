@@ -44,6 +44,7 @@ jobs:
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "image=$REGISTRY/$REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
+      #TODO 이미지 태그 중복 시 배포 실패 로직 추가 필요
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -52,6 +53,7 @@ jobs:
           container-name: ${{ env.TASK_DEFINITION_CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
+      #TODO 응답시간이 길어지면 배포 실패 로직 추가 필요
       - name: Deploy Amazon ECS task definition to ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
