@@ -11,7 +11,7 @@ env:
   ECS_CLUSTER_NAME: unstage-cluster
   ECS_SERVICE_NAME: spring-promtail-service
   TASK_DEFINITION_CONTAINER_NAME: was-promtail-spring
-  TASK_TEMPLATE_PATH: ./unstage-config/ecs/spring-task-definition.json
+  TASK_TEMPLATE_PATH: ./unstage-config/ecs/spring-promtail-task-definition-dev.json
   # TASK_DEFINITION_OUTPUT_PATH는 Github Actions 가상환경에서 생성되는 파일
   TASK_DEFINITION_OUTPUT_PATH: ./unstage-config/ecs/rendered-task-definition.json
 
