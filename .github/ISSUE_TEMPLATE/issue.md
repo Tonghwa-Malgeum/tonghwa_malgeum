@@ -2,12 +2,10 @@
 name: 기능구현
 about: 기능구현 이슈 등록
 title: ''
-labels: 기능구현
+labels:
 assignees: ''
 
 ---
-
-## 이슈
 
 ## 작업 요약
 
