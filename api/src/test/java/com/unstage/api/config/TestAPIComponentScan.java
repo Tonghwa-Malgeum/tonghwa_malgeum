@@ -8,5 +8,5 @@ import org.springframework.context.annotation.ComponentScan;
         "com.unstage.api",
         "com.unstage.core"
 })
-public class APIScan {
+public class TestAPIComponentScan {
 }

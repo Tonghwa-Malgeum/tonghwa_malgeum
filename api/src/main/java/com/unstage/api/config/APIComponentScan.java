@@ -1,4 +1,4 @@
-package com.unstage.api.testfixtures.config;
+package com.unstage.api.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,5 +8,5 @@ import org.springframework.context.annotation.ComponentScan;
         "com.unstage.api",
         "com.unstage.core"
 })
-public class TestAPIScan {
+public class APIComponentScan {
 }
