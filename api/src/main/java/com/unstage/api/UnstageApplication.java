@@ -1,12 +1,14 @@
 package com.unstage.api;
 
-import com.unstage.api.config.APIComponentScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 
-@SpringBootApplication
-@Import({APIComponentScan.class})
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.unstage.api",
+                "com.unstage.core"
+        }
+)
 public class UnstageApplication {
 
     public static void main(String[] args) {
