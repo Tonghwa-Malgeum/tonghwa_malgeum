@@ -15,13 +15,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     testImplementation("io.rest-assured:rest-assured:${restAssuredVersion}")
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     implementation(project(":core"))
     implementation(project(":support:monitoring"))
     implementation(project(":support:logging"))
 
-    testFixturesImplementation(project(":api"))
-    testImplementation(testFixtures(project(":core")))
-    testFixturesImplementation(project(":core"))
-    testFixturesImplementation(testFixtures(project(":core")))
 }
