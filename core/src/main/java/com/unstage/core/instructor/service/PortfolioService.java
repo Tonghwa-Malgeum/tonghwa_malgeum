@@ -34,17 +34,17 @@ public class PortfolioService {
         return portfolioWriter.save(instructorId, request.title(), request.content());
     }
 
-    @Transactional
-    public Portfolio updatePortfolio(final Long id, final String title, final String content) {
-        final Portfolio portfolio = getPortfolio(id);
-        portfolio.update(title, content);
-        return portfolio;
-    }
-
-    @Transactional
-    public void deletePortfolio(final Long id) {
-        final Portfolio portfolio = getPortfolio(id);
-        portfolio.softDelete(java.time.LocalDateTime.now());
-    }
+//    @Transactional
+//    public Portfolio updatePortfolio(final Long id, final String title, final String content) {
+//        final Portfolio portfolio = getPortfolio(id);
+//        portfolio.update(title, content);
+//        return portfolio;
+//    }
+//
+//    @Transactional
+//    public void deletePortfolio(final Long id) {
+//        final Portfolio portfolio = getPortfolio(id);
+//        portfolio.softDelete(java.time.LocalDateTime.now());
+//    }
 }
 

@@ -75,6 +75,18 @@ project(":api") {
         include("**/*.yml")
         into("${project.rootDir}/api/src/test/resources")
     }
+
+    /*
+    'src/main/java' 디렉토리를 test 소스셋의 자바 소스 디렉터리로 추가
+    sourceSets를 지정하지 않으면 api test 모듈이 api main 모듈을 인식하지 못함
+    */
+    sourceSets {
+        test {
+            java {
+                srcDir("src/main/java")
+            }
+        }
+    }
 }
 
 project(":core") {

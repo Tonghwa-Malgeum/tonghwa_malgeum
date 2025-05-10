@@ -1,87 +1,51 @@
 package com.unstage.api.controller;
 
-import com.unstage.core.jobposting.entity.JobPosting;
-import com.unstage.core.jobposting.repository.JobPostingRepository;
+import com.unstage.api.RestAssuredTest;
 import io.restassured.RestAssured;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import io.restassured.common.mapper.TypeRef;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(
-        classes = {
-                JobPostingControllerTest.TestConfig.class,
-                JobPostingControllerTest.TestJPAConfig.class
-        },
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
-class JobPostingControllerTest {
-    @LocalServerPort
-    private int port;
-
-    @Autowired
-    private JobPostingRepository jobPostingRepository;
-
-    @BeforeEach
-    public void setUp() {
-        if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
-            RestAssured.port = port;
-        }
-    }
+class JobPostingControllerTest extends RestAssuredTest {
 
     @Test
-    void repositoryTest() {
-        List<JobPosting> all =
-                jobPostingRepository.findAll();
-        Assertions.assertThat(all).isEmpty();
-    }
-
-    @Test
-    void restAssuredTest() {
-        RestAssured
+    @Sql(scripts = {"classpath:sql/job-posting-test-data.sql"})
+    void getJobPostings() {
+        // when
+        ValidatableResponse response = RestAssured
                 .given()
                 .when()
-                .get("/test")
+                .log().all()
+                .get("/api/v1/job-postings?page=0&size=2")
                 .then()
+                .log().all()
                 .statusCode(200);
+
+        // then
+        Map<String, Object> responseBody = response.extract().body().as(new TypeRef<Map<String, Object>>() {});
+
+        // 페이지 정보 검증
+        assertThat(responseBody.get("totalPages")).isEqualTo(2);
+        assertThat(responseBody.get("totalElements")).isEqualTo(3);
+        assertThat(responseBody.get("number")).isEqualTo(0);
+        assertThat(responseBody.get("size")).isEqualTo(2);
+
+        // 컨텐츠 검증
+        List<Map<String, Object>> content = (List<Map<String, Object>>) responseBody.get("content");
+        assertThat(content).hasSize(2);
+
+        // 첫 번째 항목 검증
+        Map<String, Object> firstItem = content.get(0);
+        assertThat(firstItem.get("id")).isEqualTo(1);
+        assertThat(firstItem.get("title")).isEqualTo("첫 번째 구인공고");
+        assertThat(firstItem.get("welfareCenterName")).isEqualTo("복지센터1");
+        assertThat(firstItem.get("region")).isEqualTo("서울");
     }
 
-    @Test
-    void jobPostingControllerTest() {
-        RestAssured
-                .given()
-                .when()
-                .get("/api/v1/job-postings?page=0&size=10")
-                .then()
-                .statusCode(200);
-    }
-
-    @Configuration
-    @ComponentScan(
-            basePackages = {
-                    "com.unstage.api",
-                    "com.unstage.core"
-            })
-    @EnableAutoConfiguration
-    static class TestConfig {
-
-    }
-
-    @Configuration
-    @EntityScan(basePackages = "com.unstage.core")
-    @EnableJpaRepositories(basePackages = "com.unstage.core")
-    static class TestJPAConfig {
-
-    }
 }

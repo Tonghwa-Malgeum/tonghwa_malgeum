@@ -42,12 +42,11 @@ public class InstructorController {
     public ResponseEntity<Void> createPortfolio(
             @PathVariable final Long instructorId, @RequestBody final CreatePortfolioRequest request) {
         final Long portfolioId = portfolioService.createPortfolio(instructorId, request);
-
         final URI location = ServletUriComponentsBuilder
                 .fromPath("/api/v1/portfolios/{portfolioId}")
                 .buildAndExpand(portfolioId)
                 .toUri();
-
+        //TODO 303 응답으로 변경
         return ResponseEntity.created(location).build();
     }
 

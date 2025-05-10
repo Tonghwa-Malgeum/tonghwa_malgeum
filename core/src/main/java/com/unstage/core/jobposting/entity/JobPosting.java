@@ -30,7 +30,7 @@ public class JobPosting extends BaseEntity {
     @Column
     private LocalDateTime recruitmentEndDate;
 
-    private JobPosting(String title, WelfareCenter welfareCenter, LocalDateTime recruitmentStartDate, LocalDateTime recruitmentEndDate) {
+    public JobPosting(String title, WelfareCenter welfareCenter, LocalDateTime recruitmentStartDate, LocalDateTime recruitmentEndDate) {
         this.title = title;
         this.welfareCenter = welfareCenter;
         this.recruitmentStartDate = recruitmentStartDate;
