@@ -1,8 +1,11 @@
 package com.unstage.api;
 
 
+import com.unstage.api.util.DatabaseCleanup;
 import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -17,10 +20,18 @@ public abstract class RestAssuredTest extends TestContainer {
     @LocalServerPort
     private int port;
 
+    @Autowired
+    private DatabaseCleanup databaseCleanup;
+
     @BeforeEach
     public void setUp() {
         if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
             RestAssured.port = port;
         }
+    }
+
+    @AfterEach
+    public void cleanup() {
+        databaseCleanup.execute();
     }
 }
