@@ -14,6 +14,8 @@ val restAssuredVersion: String by project
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation(project(":core"))
     implementation(project(":support:monitoring"))
     implementation(project(":support:logging"))
