@@ -19,6 +19,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //TODO CSRF 보호 관련 설정 필요, CSRF 토큰보다는 SameSite 고려
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
@@ -43,11 +44,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-//    private OAuth2UserService<OidcUserRequest, OidcUser> odicUserService() {
-//        return (userRequest) -> {
-//            OidcUser oidcUser = customOAuth2UserService.loadUser(userRequest);
-//            return oidcUser;
-//        };
-//    }
 }

@@ -19,7 +19,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String kakaoId;
+    private String socialUserId;
 
     @Column(nullable = false)
     private String nickname;
@@ -41,8 +41,8 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(String kakaoId, String nickname, String email, String profileImageUrl, Role role) {
-        this.kakaoId = kakaoId;
+    public User(String socialUserId, String nickname, String email, String profileImageUrl, Role role) {
+        this.socialUserId = socialUserId;
         this.nickname = nickname;
         this.email = email;
         this.profileImageUrl = profileImageUrl;

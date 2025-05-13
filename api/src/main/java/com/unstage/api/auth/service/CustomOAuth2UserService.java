@@ -1,7 +1,6 @@
 package com.unstage.api.auth.service;
 
 import com.unstage.api.auth.dto.OidcUserInfo;
-import com.unstage.core.user.entity.User;
 import com.unstage.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +9,7 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
@@ -23,34 +23,41 @@ import java.util.Map;
 public class CustomOAuth2UserService implements OAuth2UserService<OidcUserRequest, OidcUser> {
 
     private final UserService userService;
-    private final OidcUserService delegate = new OidcUserService();
+    private final OidcUserService oidcUserService = new OidcUserService();
 
     @Override
-    public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("여기는?");
-        log.debug("user idToken: {}", userRequest.getIdToken().getSubject());
+    public OidcUser loadUser(final OidcUserRequest userRequest) throws OAuth2AuthenticationException {
+        final String provider = userRequest.getClientRegistration().getRegistrationId();
+        log.info("OIDC 인증 시도 - 제공자: {}", provider);
 
-        OidcUser oidcUser = delegate.loadUser(userRequest);
-        
-        // Extract user info from the ID token claims
-        Map<String, Object> attributes = oidcUser.getAttributes();
-        OidcUserInfo userInfo = OidcUserInfo.fromAttributes(attributes);
-        
-        // Save or update user in the database
-        User user = userService.saveOrUpdateUser(
-                userInfo.getId(),
-                userInfo.getNickname(),
-                userInfo.getProfileImageUrl()
-        );
-        
-        // Create authorities based on user role
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getKey());
-        
-        // Return a new OidcUser with the user's role as authority
-        return new DefaultOidcUser(
-                Collections.singleton(authority),
-                oidcUser.getIdToken(),
-                oidcUser.getUserInfo()
-        );
+        try {
+            final OidcUser oidcUser = oidcUserService.loadUser(userRequest);
+
+            // IdToken claims로 부터 유저정보 추출
+            final Map<String, Object> idTokenClaims = oidcUser.getAttributes();
+            final OidcUserInfo userInfo = OidcUserInfo.from(idTokenClaims);
+
+            final Long userId = userService.saveOrGet(
+                    userInfo.getSocialUserid(),
+                    userInfo.getNickname(),
+                    userInfo.getProfileImageUrl()
+            );
+            final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userService.getRole(userId).getKey());
+
+            log.info("OIDC 인증 성공 - userId: {}, 제공자: {}", userId, provider);
+
+            return new DefaultOidcUser(
+                    Collections.singleton(authority),
+                    oidcUser.getIdToken(),
+                    oidcUser.getUserInfo()
+            );
+        } catch (OAuth2AuthenticationException e) {
+            log.error("OIDC 인증 실패 - 제공자: {}, 오류: {}", provider, e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("예상치 못한 OIDC 인증 오류 - 제공자: {}", provider, e);
+            throw new OAuth2AuthenticationException(
+                    new OAuth2Error("server_error", "인증 처리 중 오류 발생", null), e);
+        }
     }
 }

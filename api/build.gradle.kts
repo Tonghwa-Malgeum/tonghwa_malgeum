@@ -22,6 +22,7 @@ dependencies {
 
     testImplementation("io.rest-assured:rest-assured:${restAssuredVersion}")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:testcontainers:${project.property("testContainerVersion")}")
     testImplementation("org.testcontainers:junit-jupiter:${project.property("testContainerVersion")}")
     testImplementation("org.testcontainers:mysql:${project.property("testContainerMySqlVersion")}")

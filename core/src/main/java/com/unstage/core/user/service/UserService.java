@@ -1,50 +1,35 @@
 package com.unstage.core.user.service;
 
+import com.unstage.core.user.component.UserReader;
+import com.unstage.core.user.component.UserWriter;
 import com.unstage.core.user.entity.Role;
 import com.unstage.core.user.entity.User;
-import com.unstage.core.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
-    private final UserRepository userRepository;
-
-    @Transactional(readOnly = true)
-    public Optional<User> findByKakaoId(String kakaoId) {
-        return userRepository.findByKakaoId(kakaoId);
-    }
+    private final UserReader userReader;
+    private final UserWriter userWriter;
 
     @Transactional
-    public User createUser(String kakaoId, String nickname, String profileImageUrl) {
-        User user = User.builder()
-                .kakaoId(kakaoId)
-                .nickname(nickname)
-                .profileImageUrl(profileImageUrl)
-                .role(Role.USER)
-                .build();
-        return userRepository.save(user);
+    //TODO AOP를 통한 회원가입 모니터링 구축 필요
+    public Long saveOrGet(final String idFromIdToken, final String nickname, final String profileImageUrl) {
+        return userReader.findBy(idFromIdToken)
+                .map(User::getId)
+                .orElseGet(() -> {
+                    final Long userId = userWriter.save(idFromIdToken, nickname, profileImageUrl);
+                    log.info("유저 회원가입 완료 - userId={}", userId);
+                    return userId;
+                });
     }
 
-    @Transactional
-    public User updateUser(User user, String nickname, String profileImageUrl) {
-        user.update(nickname, profileImageUrl);
-        return userRepository.save(user);
-    }
-
-    @Transactional
-    public User saveOrUpdateUser(String kakaoId, String nickname, String profileImageUrl) {
-        Optional<User> existingUser = findByKakaoId(kakaoId);
-        
-        if (existingUser.isPresent()) {
-            return updateUser(existingUser.get(), nickname, profileImageUrl);
-        } else {
-            return createUser(kakaoId, nickname, profileImageUrl);
-        }
+    public Role getRole(final Long userId) {
+        return userReader.readRole(userId);
     }
 }
