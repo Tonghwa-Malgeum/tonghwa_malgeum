@@ -20,7 +20,7 @@ public class UserService {
     @Transactional
     //TODO AOP를 통한 회원가입 모니터링 구축 필요
     public Long saveOrGet(final String idFromIdToken, final String nickname) {
-        return userReader.findBy(idFromIdToken)
+        return userReader.readBy(idFromIdToken)
                 .map(User::getId)
                 .orElseGet(() -> {
                     final Long userId = userWriter.save(idFromIdToken, nickname);

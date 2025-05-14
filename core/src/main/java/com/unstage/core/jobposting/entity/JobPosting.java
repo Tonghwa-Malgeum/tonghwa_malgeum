@@ -1,16 +1,17 @@
 package com.unstage.core.jobposting.entity;
 
+import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "job_postings")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
 public class JobPosting extends BaseEntity {
 
     @Id
@@ -25,15 +26,6 @@ public class JobPosting extends BaseEntity {
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private WelfareCenter welfareCenter;
 
-    @Column
     private LocalDateTime recruitmentStartDate;
-    @Column
     private LocalDateTime recruitmentEndDate;
-
-    public JobPosting(String title, WelfareCenter welfareCenter, LocalDateTime recruitmentStartDate, LocalDateTime recruitmentEndDate) {
-        this.title = title;
-        this.welfareCenter = welfareCenter;
-        this.recruitmentStartDate = recruitmentStartDate;
-        this.recruitmentEndDate = recruitmentEndDate;
-    }
 }

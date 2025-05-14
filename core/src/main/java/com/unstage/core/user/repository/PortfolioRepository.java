@@ -1,6 +1,6 @@
-package com.unstage.core.instructor.repository;
+package com.unstage.core.user.repository;
 
-import com.unstage.core.instructor.entity.Portfolio;
+import com.unstage.core.user.entity.Portfolio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
     @Query("SELECT p FROM Portfolio p" +
-            " JOIN FETCH p.instructor" +
+            " JOIN FETCH p.user" +
             " WHERE p.id = :portfolioId")
     Optional<Portfolio> findWithInstructorBy(@Param("portfolioId") Long portfolioId);
     
-    List<Portfolio> findByInstructor_Id(Long instructorId);
+    List<Portfolio> findByUser_Id(Long userId);
 }

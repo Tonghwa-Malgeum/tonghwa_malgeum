@@ -1,11 +1,12 @@
 package com.unstage.core.jobposting.entity;
 
+import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "welfare_centers")
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
@@ -20,9 +21,4 @@ public class WelfareCenter extends BaseEntity {
 
     @Column(nullable = false)
     private String region;
-
-    public WelfareCenter(String name, String region) {
-        this.name = name;
-        this.region = region;
-    }
 }

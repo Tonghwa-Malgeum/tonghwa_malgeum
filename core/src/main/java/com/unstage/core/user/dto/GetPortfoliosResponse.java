@@ -1,6 +1,6 @@
-package com.unstage.core.instructor.dto;
+package com.unstage.core.user.dto;
 
-import com.unstage.core.instructor.entity.Portfolio;
+import com.unstage.core.user.entity.Portfolio;
 import lombok.*;
 
 import java.util.ArrayList;

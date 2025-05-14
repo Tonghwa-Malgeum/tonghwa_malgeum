@@ -1,4 +1,4 @@
-package com.unstage.core.jobposting.entity;
+package com.unstage.core;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

@@ -1,7 +1,7 @@
 package com.unstage.api.controller;
 
-import com.unstage.core.instructor.dto.GetPortfolioResponse;
-import com.unstage.core.instructor.service.PortfolioService;
+import com.unstage.core.user.dto.GetPortfolioResponse;
+import com.unstage.core.user.service.PortfolioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

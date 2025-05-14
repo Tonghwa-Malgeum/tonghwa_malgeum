@@ -1,4 +1,4 @@
-package com.unstage.core.instructor.dto;
+package com.unstage.core.user.dto;
 
 public record CreatePortfolioRequest(
         String title,

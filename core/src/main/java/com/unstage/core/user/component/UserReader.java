@@ -17,7 +17,7 @@ public class UserReader {
 
     private final UserRepository userRepository;
 
-    public Optional<User> findBy(final String socialUserId) {
+    public Optional<User> readBy(final String socialUserId) {
         return userRepository.findBySocialUserId(socialUserId);
     }
 
@@ -25,5 +25,16 @@ public class UserReader {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User", userId))
                 .getRole();
+    }
+
+    public User read(final Long userId) {
+        log.debug("유저 조회 실행 - id={}", userId);
+
+        final User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User", userId));
+
+        log.debug("유저 조회 완료 - id={}, name={}", user.getId(), user.getNickname());
+
+        return user;
     }
 }

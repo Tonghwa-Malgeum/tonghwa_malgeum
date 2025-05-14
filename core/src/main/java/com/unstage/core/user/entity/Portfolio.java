@@ -1,12 +1,12 @@
-package com.unstage.core.instructor.entity;
+package com.unstage.core.user.entity;
 
-import com.unstage.core.jobposting.entity.BaseEntity;
+import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name = "portfolios")
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
@@ -24,12 +24,7 @@ public class Portfolio extends BaseEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instructor_id", nullable = false,
+    @JoinColumn(name = "user_id", nullable = false,
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Instructor instructor;
-
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    private User user;
 }

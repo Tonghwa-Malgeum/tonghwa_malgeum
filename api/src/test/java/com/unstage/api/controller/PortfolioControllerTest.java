@@ -33,7 +33,7 @@ class PortfolioControllerTest extends RestAssuredTest {
         assertThat(responseBody.get("portfolioId")).isEqualTo(1);
         assertThat(responseBody.get("title")).isEqualTo("Portfolio 1");
         assertThat(responseBody.get("content")).isEqualTo("Content for portfolio 1");
-        assertThat(responseBody.get("instructorId")).isEqualTo(1);
-        assertThat(responseBody.get("instructorName")).isEqualTo("Test Instructor 1");
+        assertThat(responseBody.get("userId")).isEqualTo(1);
+        assertThat(responseBody.get("userNickname")).isEqualTo("Test Instructor 1");
     }
 }

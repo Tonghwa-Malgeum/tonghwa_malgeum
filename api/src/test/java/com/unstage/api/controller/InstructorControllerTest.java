@@ -1,7 +1,7 @@
 package com.unstage.api.controller;
 
 import com.unstage.api.RestAssuredTest;
-import com.unstage.core.instructor.dto.CreatePortfolioRequest;
+import com.unstage.core.user.dto.CreatePortfolioRequest;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
