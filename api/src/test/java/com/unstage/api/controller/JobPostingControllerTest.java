@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JobPostingControllerTest extends RestAssuredTest {
 
     @Test
-    @Sql(scripts = {"classpath:sql/job-posting-test-data.sql"})
+    @Sql(scripts = {"classpath:sql/job-posting-controller.sql"})
     void 구인공고_목록조회_API() {
         // when
         ExtractableResponse<Response> response = RestAssured

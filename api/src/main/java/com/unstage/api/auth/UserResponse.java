@@ -1,4 +1,4 @@
-package com.unstage.api.auth.dto;
+package com.unstage.api.auth;
 
 import lombok.Builder;
 import lombok.Getter;

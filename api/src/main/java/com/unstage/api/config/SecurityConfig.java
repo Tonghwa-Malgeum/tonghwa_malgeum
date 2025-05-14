@@ -1,6 +1,6 @@
 package com.unstage.api.config;
 
-import com.unstage.api.auth.service.CustomOAuth2UserService;
+import com.unstage.api.auth.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,12 +34,12 @@ public class SecurityConfig {
                 .userInfoEndpoint(userInfo -> userInfo
                     .oidcUserService(customOAuth2UserService)
                 )
-                .defaultSuccessUrl("/api/auth/login/success")
-                .failureUrl("/api/auth/login/failure")
+                .defaultSuccessUrl("/api/v1/auth/login/success")
+                .failureUrl("/api/v1/auth/login/failure")
             )
             .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/api/auth/logout"))
-                .logoutSuccessUrl("/api/auth/logout/success")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/auth/logout"))
+                .logoutSuccessUrl("/api/v1/auth/logout/success")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
             );

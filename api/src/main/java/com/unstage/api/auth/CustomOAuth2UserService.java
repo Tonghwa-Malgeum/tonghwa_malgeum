@@ -1,6 +1,5 @@
-package com.unstage.api.auth.service;
+package com.unstage.api.auth;
 
-import com.unstage.api.auth.dto.OidcUserInfo;
 import com.unstage.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

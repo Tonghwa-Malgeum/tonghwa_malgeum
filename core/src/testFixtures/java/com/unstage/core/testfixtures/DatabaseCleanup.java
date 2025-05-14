@@ -1,4 +1,4 @@
-package com.unstage.api.util;
+package com.unstage.core.testfixtures;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.Entity;
