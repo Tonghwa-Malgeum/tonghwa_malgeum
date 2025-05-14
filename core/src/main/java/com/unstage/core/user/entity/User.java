@@ -24,12 +24,6 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
-    @Column
-    private String email;
-
-    @Column
-    private String profileImageUrl;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -41,20 +35,11 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(String socialUserId, String nickname, String email, String profileImageUrl, Role role) {
+    public User(String socialUserId, String nickname, Role role) {
         this.socialUserId = socialUserId;
         this.nickname = nickname;
-        this.email = email;
-        this.profileImageUrl = profileImageUrl;
         this.role = role;
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void update(String nickname, String profileImageUrl) {
-        this.nickname = nickname;
-        this.email = email;
-        this.profileImageUrl = profileImageUrl;
         this.updatedAt = LocalDateTime.now();
     }
 }

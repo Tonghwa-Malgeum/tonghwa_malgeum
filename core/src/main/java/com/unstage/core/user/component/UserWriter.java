@@ -14,12 +14,11 @@ public class UserWriter {
 
     private final UserRepository userRepository;
 
-    public Long save(final String socialUserId, final String nickname, final String profileImageUrl) {
+    public Long save(final String socialUserId, final String nickname) {
         return userRepository.save(
                 User.builder()
                         .socialUserId(socialUserId)
                         .nickname(nickname)
-                        .profileImageUrl(profileImageUrl)
                         .role(Role.USER)
                         .build()
         ).getId();

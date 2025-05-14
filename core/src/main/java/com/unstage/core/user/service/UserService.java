@@ -19,11 +19,11 @@ public class UserService {
 
     @Transactional
     //TODO AOP를 통한 회원가입 모니터링 구축 필요
-    public Long saveOrGet(final String idFromIdToken, final String nickname, final String profileImageUrl) {
+    public Long saveOrGet(final String idFromIdToken, final String nickname) {
         return userReader.findBy(idFromIdToken)
                 .map(User::getId)
                 .orElseGet(() -> {
-                    final Long userId = userWriter.save(idFromIdToken, nickname, profileImageUrl);
+                    final Long userId = userWriter.save(idFromIdToken, nickname);
                     log.info("유저 회원가입 완료 - userId={}", userId);
                     return userId;
                 });

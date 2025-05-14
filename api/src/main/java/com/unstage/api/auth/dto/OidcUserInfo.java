@@ -12,13 +12,11 @@ import java.util.Map;
 public class OidcUserInfo {
     private String socialUserid;
     private String nickname;
-    private String profileImageUrl;
 
     public static OidcUserInfo from(Map<String, Object> idTokenClaims) {
         return new OidcUserInfo(
                 String.valueOf(idTokenClaims.get("sub")),
-                String.valueOf(idTokenClaims.get("nickname")),
-                String.valueOf(idTokenClaims.get("picture"))
+                String.valueOf(idTokenClaims.get("nickname"))
         );
     }
 }

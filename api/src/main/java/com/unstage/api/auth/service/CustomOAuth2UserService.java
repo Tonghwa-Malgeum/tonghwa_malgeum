@@ -32,16 +32,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OidcUserReques
 
         try {
             final OidcUser oidcUser = oidcUserService.loadUser(userRequest);
-
-            // IdToken claims로 부터 유저정보 추출
-            final Map<String, Object> idTokenClaims = oidcUser.getAttributes();
-            final OidcUserInfo userInfo = OidcUserInfo.from(idTokenClaims);
-
-            final Long userId = userService.saveOrGet(
-                    userInfo.getSocialUserid(),
-                    userInfo.getNickname(),
-                    userInfo.getProfileImageUrl()
-            );
+            final OidcUserInfo userInfo = extractOidcUserInfo(oidcUser);
+            final Long userId = saveOrGetUser(userInfo);
             final SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userService.getRole(userId).getKey());
 
             log.info("OIDC 인증 성공 - userId: {}, 제공자: {}", userId, provider);
@@ -59,5 +51,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OidcUserReques
             throw new OAuth2AuthenticationException(
                     new OAuth2Error("server_error", "인증 처리 중 오류 발생", null), e);
         }
+    }
+
+    private Long saveOrGetUser(final OidcUserInfo userInfo) {
+        return userService.saveOrGet(
+                userInfo.getSocialUserid(),
+                userInfo.getNickname()
+        );
+    }
+
+    private static OidcUserInfo extractOidcUserInfo(final OidcUser oidcUser) {
+        final Map<String, Object> idTokenClaims = oidcUser.getAttributes();
+        return OidcUserInfo.from(idTokenClaims);
     }
 }
