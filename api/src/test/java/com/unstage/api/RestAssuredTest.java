@@ -1,6 +1,7 @@
 package com.unstage.api;
 
 
+import com.unstage.api.auth.config.TestSecurityConfig;
 import com.unstage.api.util.DatabaseCleanup;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterEach;
@@ -10,12 +11,24 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        , properties = {"spring.main.allow-bean-definition-overriding=true"}
+)
 @ActiveProfiles("test")
 @EnableAutoConfiguration
-@ComponentScan(basePackages = {"com.unstage.api", "com.unstage.core"})
+@ComponentScan(
+        basePackages = {"com.unstage.api", "com.unstage.core"},
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = com.unstage.api.config.SecurityConfig.class
+        )
+)
+@Import(TestSecurityConfig.class)
 public abstract class RestAssuredTest extends TestContainer {
     @LocalServerPort
     private int port;

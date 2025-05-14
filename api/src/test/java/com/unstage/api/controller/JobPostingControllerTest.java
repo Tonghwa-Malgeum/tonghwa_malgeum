@@ -1,51 +1,45 @@
 package com.unstage.api.controller;
 
 import com.unstage.api.RestAssuredTest;
+import com.unstage.core.jobposting.dto.GetJobPostingsResponse;
+import com.unstage.core.paging.PageResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
-import io.restassured.response.ValidatableResponse;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-import java.util.Map;
-
+import static com.unstage.api.auth.config.TestSecurityConfig.TestSecurityFilter.TEST_AUTH_HEADER;
+import static com.unstage.api.auth.config.TestSecurityConfig.TestSecurityFilter.TEST_AUTH_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobPostingControllerTest extends RestAssuredTest {
 
     @Test
     @Sql(scripts = {"classpath:sql/job-posting-test-data.sql"})
-    void getJobPostings() {
+    void 구인공고_목록조회_API() {
         // when
-        ValidatableResponse response = RestAssured
+        ExtractableResponse<Response> response = RestAssured
                 .given()
+                .header(TEST_AUTH_HEADER, TEST_AUTH_VALUE)
                 .when()
                 .log().all()
                 .get("/api/v1/job-postings?page=0&size=2")
                 .then()
                 .log().all()
-                .statusCode(200);
+                .statusCode(HttpStatus.OK.value())
+                .extract();
 
         // then
-        Map<String, Object> responseBody = response.extract().body().as(new TypeRef<Map<String, Object>>() {});
+        PageResponse<GetJobPostingsResponse> pageResponse = response.as(new TypeRef<>() {});
+        assertThat(pageResponse.content()).hasSize(2);
 
-        // 페이지 정보 검증
-        assertThat(responseBody.get("totalPages")).isEqualTo(2);
-        assertThat(responseBody.get("totalElements")).isEqualTo(3);
-        assertThat(responseBody.get("number")).isEqualTo(0);
-        assertThat(responseBody.get("size")).isEqualTo(2);
-
-        // 컨텐츠 검증
-        List<Map<String, Object>> content = (List<Map<String, Object>>) responseBody.get("content");
-        assertThat(content).hasSize(2);
-
-        // 첫 번째 항목 검증
-        Map<String, Object> firstItem = content.get(0);
-        assertThat(firstItem.get("id")).isEqualTo(1);
-        assertThat(firstItem.get("title")).isEqualTo("첫 번째 구인공고");
-        assertThat(firstItem.get("welfareCenterName")).isEqualTo("복지센터1");
-        assertThat(firstItem.get("region")).isEqualTo("서울");
+        GetJobPostingsResponse getJobPostingsResponse = pageResponse.content().get(0);
+        assertThat(getJobPostingsResponse.getId()).isEqualTo(1);
+        assertThat(getJobPostingsResponse.getTitle()).isEqualTo("첫 번째 구인공고");
+        assertThat(getJobPostingsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+        assertThat(getJobPostingsResponse.getRegion()).isEqualTo("서울");
     }
-
 }
