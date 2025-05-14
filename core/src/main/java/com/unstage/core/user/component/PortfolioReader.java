@@ -21,7 +21,7 @@ public class PortfolioReader {
     public Portfolio read(final Long portfolioId) {
         log.debug("포트폴리오 조회 실행 - id={}", portfolioId);
 
-        final Portfolio portfolio = portfolioRepository.findWithInstructorBy(portfolioId)
+        final Portfolio portfolio = portfolioRepository.findWithUserBy(portfolioId)
                 .orElseThrow(() -> new EntityNotFoundException("Portfolio", portfolioId));
 
         log.debug("포트폴리오 조회 완료 - id={}, userId={}",

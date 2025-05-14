@@ -16,28 +16,9 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-    // 코드 리뷰 완료
     @GetMapping("/{portfolioId}")
     public ResponseEntity<GetPortfolioResponse> getPortfolio(@PathVariable final Long portfolioId) {
         final GetPortfolioResponse response = portfolioService.getPortfolio(portfolioId);
         return ResponseEntity.ok(response);
     }
-
-//    @PutMapping("/portfolios/{id}")
-//    public ResponseEntity<PortfolioResponse> updatePortfolio(
-//            @PathVariable final Long id,
-//            @RequestBody final CreatePortfolioRequest request) {
-//        final Portfolio portfolio = portfolioService.updatePortfolio(
-//                id,
-//                request.title(),
-//                request.content()
-//        );
-//        return ResponseEntity.ok(PortfolioResponse.from(portfolio));
-//    }
-//
-//    @DeleteMapping("/portfolios/{id}")
-//    public ResponseEntity<Void> deletePortfolio(@PathVariable final Long id) {
-//        portfolioService.deletePortfolio(id);
-//        return ResponseEntity.noContent().build();
-//    }
 }
