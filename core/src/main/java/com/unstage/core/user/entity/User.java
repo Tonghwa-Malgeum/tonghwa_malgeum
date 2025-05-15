@@ -1,24 +1,28 @@
-package com.unstage.core.jobposting.entity;
+package com.unstage.core.user.entity;
 
 import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "welfare_centers")
+@Table(name = "users")
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
 @Builder
-public class WelfareCenter extends BaseEntity {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String socialUserId;
 
     @Column(nullable = false)
-    private String region;
+    private String nickname;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

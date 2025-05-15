@@ -1,18 +1,16 @@
-package com.unstage.core.jobposting.entity;
+package com.unstage.core.user.entity;
 
 import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Entity
-@Table(name = "job_postings")
+@Table(name = "portfolios")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Builder
-public class JobPosting extends BaseEntity {
+public class Portfolio extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,11 +19,12 @@ public class JobPosting extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "welfare_center_id", nullable = false,
-            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private WelfareCenter welfareCenter;
+    @Lob
+    @Column(nullable = false)
+    private String content;
 
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false,
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private User user;
 }
