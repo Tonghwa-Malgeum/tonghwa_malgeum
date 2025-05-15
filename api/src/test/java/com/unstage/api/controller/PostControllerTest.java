@@ -1,0 +1,100 @@
+package com.unstage.api.controller;
+
+import com.unstage.api.RestAssuredTest;
+import com.unstage.core.paging.PageResponse;
+import com.unstage.core.post.dto.GetPostsResponse;
+import com.unstage.core.post.entity.Category;
+import io.restassured.RestAssured;
+import io.restassured.common.mapper.TypeRef;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.jdbc.Sql;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class PostControllerTest extends RestAssuredTest {
+
+    @Test
+    @Sql(scripts = {"classpath:sql/post-controller.sql"})
+    void 전체_게시물_목록조회_API() {
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given()
+                .when()
+                .log().all()
+                .get("/api/v1/posts?page=0&size=3")
+                .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+
+        // then
+        PageResponse<GetPostsResponse> pageResponse = response.as(new TypeRef<>() {});
+        assertThat(pageResponse.content()).hasSize(3);
+
+        GetPostsResponse getPostsResponse = pageResponse.content().get(0);
+        assertThat(getPostsResponse.getId()).isEqualTo(1);
+        assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
+        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
+        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.NOTICE);
+    }
+
+//    @Test
+//    @Sql(scripts = {"classpath:sql/post-controller.sql"})
+//    void 공지사항_목록조회_API() {
+//        // when
+//        ExtractableResponse<Response> response = RestAssured
+//                .given()
+//                .header(TEST_AUTH_HEADER, TEST_AUTH_VALUE)
+//                .when()
+//                .log().all()
+//                .get("/api/v1/posts/notice?page=1&size=2")
+//                .then()
+//                .log().all()
+//                .statusCode(HttpStatus.OK.value())
+//                .extract();
+//
+//        // then
+//        PageResponse<GetPostsResponse> pageResponse = response.as(new TypeRef<>() {});
+//        assertThat(pageResponse.content()).hasSize(2);
+//
+//        GetPostsResponse getPostsResponse = pageResponse.content().get(0);
+//        assertThat(getPostsResponse.getId()).isEqualTo(1);
+//        assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
+//        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+//        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
+//        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.NOTICE);
+//    }
+//
+//    @Test
+//    @Sql(scripts = {"classpath:sql/post-controller.sql"})
+//    void 채용_목록조회_API() {
+//        // when
+//        ExtractableResponse<Response> response = RestAssured
+//                .given()
+//                .header(TEST_AUTH_HEADER, TEST_AUTH_VALUE)
+//                .when()
+//                .log().all()
+//                .get("/api/v1/posts/job?page=1&size=2")
+//                .then()
+//                .log().all()
+//                .statusCode(HttpStatus.OK.value())
+//                .extract();
+//
+//        // then
+//        PageResponse<GetPostsResponse> pageResponse = response.as(new TypeRef<>() {});
+//        assertThat(pageResponse.content()).hasSize(2);
+//
+//        GetPostsResponse getPostsResponse = pageResponse.content().get(0);
+//        assertThat(getPostsResponse.getId()).isEqualTo(3);
+//        assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 채용공고");
+//        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+//        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
+//        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.JOB);
+//        assertThat(getPostsResponse.getRecruitmentStartDate()).isNotNull();
+//        assertThat(getPostsResponse.getRecruitmentEndDate()).isNotNull();
+//    }
+}

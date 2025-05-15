@@ -24,6 +24,7 @@ public class TestSecurityConfig {
                 .addFilterBefore(new TestSecurityFilter(),
                         UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/posts/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();
