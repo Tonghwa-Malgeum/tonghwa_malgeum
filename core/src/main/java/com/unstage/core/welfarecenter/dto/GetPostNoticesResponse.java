@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetJobPostingsResponse {
+public class GetPostNoticesResponse {
     private Long id;
     private String title;
+    private String url;
+    private Long welfareCenterId;
     private String welfareCenterName;
     private String region;
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    private String category;
     private LocalDateTime registrationDate;
 }

@@ -2,6 +2,7 @@ package com.unstage.api.controller;
 
 import com.unstage.api.RestAssuredTest;
 import com.unstage.core.paging.PageResponse;
+import com.unstage.core.welfarecenter.dto.GetPostNoticesResponse;
 import com.unstage.core.welfarecenter.dto.GetPostsResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
@@ -38,35 +39,36 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
         assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
+        assertThat(getPostsResponse.getUrl()).isEqualTo("https://example.com/notice1");
         assertThat(getPostsResponse.getCategory()).isEqualTo("notice");
     }
 
-//    @Test
-//    @Sql(scripts = {"classpath:sql/post-controller.sql"})
-//    void 공지사항_목록조회_API() {
-//        // when
-//        ExtractableResponse<Response> response = RestAssured
-//                .given()
-//                .header(TEST_AUTH_HEADER, TEST_AUTH_VALUE)
-//                .when()
-//                .log().all()
-//                .get("/api/v1/posts/notice?page=1&size=2")
-//                .then()
-//                .log().all()
-//                .statusCode(HttpStatus.OK.value())
-//                .extract();
-//
-//        // then
-//        PageResponse<GetPostsResponse> pageResponse = response.as(new TypeRef<>() {});
-//        assertThat(pageResponse.content()).hasSize(2);
-//
-//        GetPostsResponse getPostsResponse = pageResponse.content().get(0);
-//        assertThat(getPostsResponse.getId()).isEqualTo(1);
-//        assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
-//        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
-//        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
-//        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.NOTICE);
-//    }
+    @Test
+    @Sql(scripts = {"classpath:sql/post-controller.sql"})
+    void 공지사항_목록조회_API() {
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given()
+                .when()
+                .log().all()
+                .get("/api/v1/posts/notice?page=0&size=2")
+                .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+
+        // then
+        PageResponse<GetPostNoticesResponse> pageResponse = response.as(new TypeRef<>() {});
+        assertThat(pageResponse.content()).hasSize(2);
+
+        GetPostNoticesResponse getPostsResponse = pageResponse.content().get(1);
+        assertThat(getPostsResponse.getId()).isEqualTo(2);
+        assertThat(getPostsResponse.getTitle()).isEqualTo("두 번째 공지사항");
+        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
+        assertThat(getPostsResponse.getUrl()).isEqualTo("https://example.com/notice2");
+        assertThat(getPostsResponse.getCategory()).isEqualTo("notice");
+    }
 //
 //    @Test
 //    @Sql(scripts = {"classpath:sql/post-controller.sql"})
