@@ -1,4 +1,4 @@
-package com.unstage.core.jobposting.entity;
+package com.unstage.core.welfarecenter.entity;
 
 import com.unstage.core.BaseEntity;
 import jakarta.persistence.*;

@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/error").permitAll()
                 .requestMatchers("/api/auth/login/**", "/api/auth/logout/**").permitAll()
                 .requestMatchers("/api/auth/user").permitAll()
+                    .requestMatchers("/api/v1/posts/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

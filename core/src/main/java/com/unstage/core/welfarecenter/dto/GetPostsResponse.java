@@ -1,4 +1,4 @@
-package com.unstage.core.jobposting.dto;
+package com.unstage.core.welfarecenter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +11,13 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetJobPostingsResponse {
-    private Long id;
+public class GetPostsResponse {
+    private Long postId;
     private String title;
+    private String url;
+    private Long welfareCenterId;
     private String welfareCenterName;
     private String region;
-    private LocalDateTime recruitmentStartDate;
-    private LocalDateTime recruitmentEndDate;
+    private String category;
     private LocalDateTime registrationDate;
 }

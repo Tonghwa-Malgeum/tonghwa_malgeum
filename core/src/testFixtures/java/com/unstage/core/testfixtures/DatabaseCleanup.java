@@ -1,10 +1,7 @@
 package com.unstage.core.testfixtures;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +22,13 @@ public class DatabaseCleanup {
     public void afterPropertiesSet() {
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         tableNames = entities.stream()
-                .filter(entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null)
+                .filter(entityType -> {
+                    Class<?> javaType = entityType.getJavaType();
+                    return javaType.getAnnotation(Entity.class) != null &&
+                            // 단일 테이블 상속을 사용하지만 부모 클래스가 아닌 엔티티는 건너뜁니다
+                            (javaType.getAnnotation(Inheritance.class) != null ||
+                                    javaType.getAnnotation(DiscriminatorValue.class) == null);
+                })
                 .map(entityType -> {
                     Class<?> javaType = entityType.getJavaType();
                     Table tableAnnotation = javaType.getAnnotation(Table.class);
