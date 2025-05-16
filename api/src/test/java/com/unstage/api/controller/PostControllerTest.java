@@ -2,6 +2,7 @@ package com.unstage.api.controller;
 
 import com.unstage.api.RestAssuredTest;
 import com.unstage.core.paging.PageResponse;
+import com.unstage.core.welfarecenter.dto.GetPostJobsResponse;
 import com.unstage.core.welfarecenter.dto.GetPostNoticesResponse;
 import com.unstage.core.welfarecenter.dto.GetPostsResponse;
 import io.restassured.RestAssured;
@@ -18,7 +19,7 @@ class PostControllerTest extends RestAssuredTest {
 
     @Test
     @Sql(scripts = {"classpath:sql/post-controller.sql"})
-    void 전체_게시물_목록조회_API() {
+    void 전체_게시물_목록조회_페이징_API() {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
@@ -41,11 +42,12 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
         assertThat(getPostsResponse.getUrl()).isEqualTo("https://example.com/notice1");
         assertThat(getPostsResponse.getCategory()).isEqualTo("notice");
+        assertThat(getPostsResponse.getRegistrationDate()).isNotNull();
     }
 
     @Test
     @Sql(scripts = {"classpath:sql/post-controller.sql"})
-    void 공지사항_목록조회_API() {
+    void 공지사항_목록조회_페이징_API() {
         // when
         ExtractableResponse<Response> response = RestAssured
                 .given()
@@ -68,34 +70,34 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
         assertThat(getPostsResponse.getUrl()).isEqualTo("https://example.com/notice2");
         assertThat(getPostsResponse.getCategory()).isEqualTo("notice");
+        assertThat(getPostsResponse.getRegistrationDate()).isNotNull();
     }
-//
-//    @Test
-//    @Sql(scripts = {"classpath:sql/post-controller.sql"})
-//    void 채용_목록조회_API() {
-//        // when
-//        ExtractableResponse<Response> response = RestAssured
-//                .given()
-//                .header(TEST_AUTH_HEADER, TEST_AUTH_VALUE)
-//                .when()
-//                .log().all()
-//                .get("/api/v1/posts/job?page=1&size=2")
-//                .then()
-//                .log().all()
-//                .statusCode(HttpStatus.OK.value())
-//                .extract();
-//
-//        // then
-//        PageResponse<GetPostsResponse> pageResponse = response.as(new TypeRef<>() {});
-//        assertThat(pageResponse.content()).hasSize(2);
-//
-//        GetPostsResponse getPostsResponse = pageResponse.content().get(0);
-//        assertThat(getPostsResponse.getId()).isEqualTo(3);
-//        assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 채용공고");
-//        assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
-//        assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
-//        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.JOB);
-//        assertThat(getPostsResponse.getRecruitmentStartDate()).isNotNull();
-//        assertThat(getPostsResponse.getRecruitmentEndDate()).isNotNull();
-//    }
+
+    @Test
+    @Sql(scripts = {"classpath:sql/post-controller.sql"})
+    void 채용_목록조회_페이징_API() {
+        // when
+        ExtractableResponse<Response> response = RestAssured
+                .given()
+                .when()
+                .log().all()
+                .get("/api/v1/posts/job?page=0&size=2")
+                .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value())
+                .extract();
+
+        // then
+        PageResponse<GetPostJobsResponse> pageResponse = response.as(new TypeRef<>() {});
+        assertThat(pageResponse.content()).hasSize(2);
+
+        GetPostJobsResponse getPostJobsResponse = pageResponse.content().get(0);
+        assertThat(getPostJobsResponse.getId()).isEqualTo(3);
+        assertThat(getPostJobsResponse.getTitle()).isEqualTo("첫 번째 채용공고");
+        assertThat(getPostJobsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
+        assertThat(getPostJobsResponse.getRegion()).isEqualTo("서울");
+        assertThat(getPostJobsResponse.getRecruitmentStartDate()).isNotNull();
+        assertThat(getPostJobsResponse.getRecruitmentEndDate()).isNotNull();
+        assertThat(getPostJobsResponse.getRegistrationDate()).isNotNull();
+    }
 }

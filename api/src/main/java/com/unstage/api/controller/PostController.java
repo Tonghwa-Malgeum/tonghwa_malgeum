@@ -2,6 +2,7 @@ package com.unstage.api.controller;
 
 import com.unstage.core.paging.PageParams;
 import com.unstage.core.paging.PageResponse;
+import com.unstage.core.welfarecenter.dto.GetPostJobsResponse;
 import com.unstage.core.welfarecenter.dto.GetPostNoticesResponse;
 import com.unstage.core.welfarecenter.dto.GetPostsResponse;
 import com.unstage.core.welfarecenter.service.PostService;
@@ -20,20 +21,20 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<PageResponse<GetPostsResponse>> getAllPosts(@ModelAttribute final PageParams pageParams) {
-        final PageResponse<GetPostsResponse> response = postService.getPostingsRes(pageParams);
+    public ResponseEntity<PageResponse<GetPostsResponse>> getPostingsRespWithPage(@ModelAttribute final PageParams pageParams) {
+        final PageResponse<GetPostsResponse> response = postService.getPostingsRespWithPage(pageParams);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/notice")
-    public ResponseEntity<PageResponse<GetPostNoticesResponse>> getNoticePosts(@ModelAttribute final PageParams pageParams) {
-        final PageResponse<GetPostNoticesResponse> response = postService.getPostNoticesRes(pageParams);
+    public ResponseEntity<PageResponse<GetPostNoticesResponse>> getPostNoticesRespWithPage(@ModelAttribute final PageParams pageParams) {
+        final PageResponse<GetPostNoticesResponse> response = postService.getPostNoticesRespWithPage(pageParams);
         return ResponseEntity.ok(response);
     }
-//
-//    @GetMapping("/job")
-//    public ResponseEntity<PageResponse<GetPostsResponse>> getJobPosts(@ModelAttribute final PageParams pageParams) {
-//        final PageResponse<GetPostsResponse> response = postService.getJobPosts(pageParams.page(), pageParams.size());
-//        return ResponseEntity.ok(response);
-//    }
+
+    @GetMapping("/job")
+    public ResponseEntity<PageResponse<GetPostJobsResponse>> getPostJobsRespWithPage(@ModelAttribute final PageParams pageParams) {
+        final PageResponse<GetPostJobsResponse> response = postService.getPostJobsRespWithPage(pageParams);
+        return ResponseEntity.ok(response);
+    }
 }

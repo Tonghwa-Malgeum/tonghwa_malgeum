@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.unstage.core.paging.PageResponse;
 import com.unstage.core.paging.PageUtils;
+import com.unstage.core.welfarecenter.dto.GetPostJobsResponse;
 import com.unstage.core.welfarecenter.dto.GetPostNoticesResponse;
 import com.unstage.core.welfarecenter.dto.GetPostsResponse;
 import jakarta.persistence.EntityManager;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import static com.unstage.core.welfarecenter.entity.QPost.post;
+import static com.unstage.core.welfarecenter.entity.QPostJob.postJob;
 import static com.unstage.core.welfarecenter.entity.QPostNotice.postNotice;
 
 @Repository
@@ -24,7 +26,7 @@ public class PostQDSLRepository {
     private final EntityManager entityManager;
     private final JPAQueryFactory queryFactory;
 
-    public PageResponse<GetPostsResponse> findPostsResWithPage(final int page, final int size) {
+    public PageResponse<GetPostsResponse> findPostsRespWithPage(final int page, final int size) {
         final Pageable pageable = PageRequest.of(page, size);
 
         final JPAQuery<GetPostsResponse> query = queryFactory
@@ -54,7 +56,7 @@ public class PostQDSLRepository {
         );
     }
 
-    public PageResponse<GetPostNoticesResponse> findByPostNoticesResWithPage(final int page, final int size) {
+    public PageResponse<GetPostNoticesResponse> findPostNoticesRespWithPage(final int page, final int size) {
         final Pageable pageable = PageRequest.of(page, size);
 
         final JPAQuery<GetPostNoticesResponse> query = queryFactory
@@ -83,35 +85,35 @@ public class PostQDSLRepository {
                 resultPage.getContent()
         );
     }
-//
-//    public PageResponse<GetPostsResponse> findByJobWithPage(int page, int size) {
-//        Pageable pageable = PageRequest.of(page - 1, size);
-//
-//        String jpql = "SELECT new com.unstage.core.welfarecenter.dto.GetPostsResponse(" +
-//                "p.id, p.title, w.name, w.region, p.url, p.category, " +
-//                "(SELECT MIN(pj.recruitmentStartDate) FROM PostJob pj WHERE pj.post = p), " +
-//                "(SELECT MIN(pj.recruitmentEndDate) FROM PostJob pj WHERE pj.post = p), " +
-//                "p.createdDate) " +
-//                "FROM Post p JOIN p.welfareCenter w " +
-//                "WHERE p.category = :category";
-//
-//        TypedQuery<GetPostsResponse> query = entityManager.createQuery(jpql, GetPostsResponse.class);
-//        query.setParameter("category", Category.JOB);
-//        query.setFirstResult((int) pageable.getOffset());
-//        query.setMaxResults(pageable.getPageSize());
-//        List<GetPostsResponse> content = query.getResultList();
-//
-//        String countJpql = "SELECT COUNT(p) FROM Post p WHERE p.category = :category";
-//        Long total = entityManager.createQuery(countJpql, Long.class)
-//                .setParameter("category", Category.JOB)
-//                .getSingleResult();
-//
-//        return new PageResponse<>(
-//                (int) Math.ceil((double) total / size),
-//                total,
-//                pageable.getPageNumber(),
-//                pageable.getPageSize(),
-//                content
-//        );
-//    }
+
+    public PageResponse<GetPostJobsResponse> findPostJobsRespWithPage(final int page, final int size) {
+        final Pageable pageable = PageRequest.of(page, size);
+
+        final JPAQuery<GetPostJobsResponse> query = queryFactory
+                .select(Projections.fields(GetPostJobsResponse.class,
+                        postJob.id.as("id"),
+                        postJob.title.as("title"),
+                        postJob.url.as("url"),
+                        postJob.welfareCenter.id.as("welfareCenterId"),
+                        postJob.welfareCenter.name.as("welfareCenterName"),
+                        postJob.welfareCenter.region.as("region"),
+                        postJob.recruitmentStartDate.as("recruitmentStartDate"),
+                        postJob.recruitmentEndDate.as("recruitmentEndDate"),
+                        postJob.createdDate.as("registrationDate")
+                ))
+                .from(postJob);
+
+        final JPAQuery<Long> countQuery = queryFactory
+                .select(postJob.count())
+                .from(postJob);
+
+        final Page<GetPostJobsResponse> resultPage = PageUtils.toPage(query, countQuery, pageable);
+        return new PageResponse<>(
+                resultPage.getTotalPages(),
+                resultPage.getTotalElements(),
+                resultPage.getNumber(),
+                resultPage.getSize(),
+                resultPage.getContent()
+        );
+    }
 }
