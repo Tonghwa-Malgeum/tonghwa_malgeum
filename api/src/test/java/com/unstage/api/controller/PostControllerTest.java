@@ -2,8 +2,7 @@ package com.unstage.api.controller;
 
 import com.unstage.api.RestAssuredTest;
 import com.unstage.core.paging.PageResponse;
-import com.unstage.core.post.dto.GetPostsResponse;
-import com.unstage.core.post.entity.Category;
+import com.unstage.core.welfarecenter.dto.GetPostsResponse;
 import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
@@ -39,7 +38,7 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
         assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
-        assertThat(getPostsResponse.getCategory()).isEqualTo(Category.NOTICE);
+        assertThat(getPostsResponse.getCategory()).isEqualTo("notice");
     }
 
 //    @Test

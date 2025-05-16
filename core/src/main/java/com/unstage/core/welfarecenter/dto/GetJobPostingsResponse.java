@@ -1,4 +1,4 @@
-package com.unstage.core.jobposting.dto;
+package com.unstage.core.welfarecenter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

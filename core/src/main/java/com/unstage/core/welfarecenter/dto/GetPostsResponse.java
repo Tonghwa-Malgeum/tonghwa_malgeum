@@ -1,6 +1,5 @@
-package com.unstage.core.post.dto;
+package com.unstage.core.welfarecenter.dto;
 
-import com.unstage.core.post.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +18,6 @@ public class GetPostsResponse {
     private Long welfareCenterId;
     private String welfareCenterName;
     private String region;
-    private Category category;
+    private String category;
     private LocalDateTime registrationDate;
 }

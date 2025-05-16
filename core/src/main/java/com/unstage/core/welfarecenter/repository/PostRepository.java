@@ -1,6 +1,6 @@
-package com.unstage.core.post.repository;
+package com.unstage.core.welfarecenter.repository;
 
-import com.unstage.core.post.entity.Post;
+import com.unstage.core.welfarecenter.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

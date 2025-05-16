@@ -2,8 +2,8 @@ package com.unstage.api.controller;
 
 import com.unstage.core.paging.PageParams;
 import com.unstage.core.paging.PageResponse;
-import com.unstage.core.post.dto.GetPostsResponse;
-import com.unstage.core.post.service.PostService;
+import com.unstage.core.welfarecenter.dto.GetPostsResponse;
+import com.unstage.core.welfarecenter.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
