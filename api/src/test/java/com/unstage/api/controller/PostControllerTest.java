@@ -36,7 +36,7 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(pageResponse.content()).hasSize(3);
 
         GetPostsResponse getPostsResponse = pageResponse.content().get(0);
-        assertThat(getPostsResponse.getId()).isEqualTo(1);
+        assertThat(getPostsResponse.getPostId()).isEqualTo(1);
         assertThat(getPostsResponse.getTitle()).isEqualTo("첫 번째 공지사항");
         assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
@@ -64,7 +64,7 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(pageResponse.content()).hasSize(2);
 
         GetPostNoticesResponse getPostsResponse = pageResponse.content().get(1);
-        assertThat(getPostsResponse.getId()).isEqualTo(2);
+        assertThat(getPostsResponse.getPostId()).isEqualTo(2);
         assertThat(getPostsResponse.getTitle()).isEqualTo("두 번째 공지사항");
         assertThat(getPostsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
         assertThat(getPostsResponse.getRegion()).isEqualTo("서울");
@@ -92,7 +92,7 @@ class PostControllerTest extends RestAssuredTest {
         assertThat(pageResponse.content()).hasSize(2);
 
         GetPostJobsResponse getPostJobsResponse = pageResponse.content().get(0);
-        assertThat(getPostJobsResponse.getId()).isEqualTo(3);
+        assertThat(getPostJobsResponse.getPostId()).isEqualTo(3);
         assertThat(getPostJobsResponse.getTitle()).isEqualTo("첫 번째 채용공고");
         assertThat(getPostJobsResponse.getWelfareCenterName()).isEqualTo("복지센터1");
         assertThat(getPostJobsResponse.getRegion()).isEqualTo("서울");

@@ -31,7 +31,7 @@ public class PostQDSLRepository {
 
         final JPAQuery<GetPostsResponse> query = queryFactory
                 .select(Projections.fields(GetPostsResponse.class,
-                        post.id.as("id"),
+                        post.id.as("postId"),
                         post.title.as("title"),
                         post.url.as("url"),
                         post.welfareCenter.id.as("welfareCenterId"),
@@ -61,7 +61,7 @@ public class PostQDSLRepository {
 
         final JPAQuery<GetPostNoticesResponse> query = queryFactory
                 .select(Projections.fields(GetPostNoticesResponse.class,
-                        postNotice.id.as("id"),
+                        postNotice.id.as("postId"),
                         postNotice.title.as("title"),
                         postNotice.url.as("url"),
                         postNotice.welfareCenter.id.as("welfareCenterId"),
@@ -91,7 +91,7 @@ public class PostQDSLRepository {
 
         final JPAQuery<GetPostJobsResponse> query = queryFactory
                 .select(Projections.fields(GetPostJobsResponse.class,
-                        postJob.id.as("id"),
+                        postJob.id.as("postId"),
                         postJob.title.as("title"),
                         postJob.url.as("url"),
                         postJob.welfareCenter.id.as("welfareCenterId"),
